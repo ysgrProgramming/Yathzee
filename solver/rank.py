@@ -1,6 +1,12 @@
 class Rank():
     def __init__(self, name="unnamed_rank", **kwargs):
-        self.params = {"rtype": None, "base": 0, "rate": 1, "target": {1,2,3,4,5,6}, "level": 1}
+        self.params = {
+            "rtype": None,
+            "base": 0,
+            "rate": 1,
+            "target": {1,2,3,4,5,6},
+            "level": 1
+        }
         self.name = name
         for k, v in kwargs.items():
             if k in self.params:
@@ -8,16 +14,20 @@ class Rank():
 
     def get_point(self, pattern):
         rtype = self.params["rtype"]
-
+        pattern = sorted(pattern)
         point = self.params["base"] + sum([p for p in pattern if p in self.params["target"]])*self.params["rate"]
+
         if rtype == "straight":
-            if self.is_straight(pattern, self.params["level"]): return point
+            if self.is_straight(pattern, self.params["level"]):
+                return point
             else: return 0
         elif rtype == "group":
-            if self.is_group(pattern, self.params["level"]): return point
+            if self.is_group(pattern, self.params["level"]):
+                return point
             else: return 0
         elif rtype == "fullhouse":
-            if self.is_fullhouse(pattern): return point
+            if self.is_fullhouse(pattern):
+                return point
             else: return 0
         else:
             return point
@@ -29,9 +39,7 @@ class Rank():
             if p > buf+1: count = 1
             elif p == buf+1: count += 1
             buf = p
-
             if count >= level: return True
-
         return False
 
     def is_group(self, pattern, level):
@@ -39,12 +47,9 @@ class Rank():
         buf = -1
         for p in pattern:
             if p == buf: count += 1
-            else:
-                count = 1
+            else: count = 1
             buf = p
-
             if count >= level: return True
-
         return False
 
     def is_fullhouse(self, pattern):
@@ -58,7 +63,7 @@ class Rank():
         return self.name
 
 if __name__ == "__main__":
-    rank = Rank("3ダイス", rtype="fullhouse", level=3)
-    pattern = (2,2,2,4,4)
+    rank = Rank("3ダイス", rtype="group", level=3)
+    pattern = (3,3,3,4,5)
     print(rank)
     print(f"{pattern} = {rank.get_point(pattern)}")
