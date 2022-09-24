@@ -8,11 +8,11 @@ class RankManager():
         self.bonus_params = {
             "base": 0,
             "marker": 0,
-            "target": []
+            "target": set()
         }
 
         for k, v in kwargs.items():
             if k in self.bonus_params:
                 self.bonus_params[k] = v
     
-    
+

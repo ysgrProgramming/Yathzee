@@ -6,6 +6,8 @@ name = "pypi"
 [packages]
 numpy = "*"
 matplotlib = "*"
+pybind11 = "*"
+pytest = "*"
 
 [dev-packages]
 
