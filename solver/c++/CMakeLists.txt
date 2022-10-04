@@ -1,14 +1,10 @@
-cmake_minimum_required(VERSION 3.2)
-project(test)
-
-set(PYBIND11_CPP_STANDARD -std=c++11)
-
-set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+cmake_minimum_required(VERSION 3.4...3.18)
+project(cmake_example)
 
 add_subdirectory(pybind11)
+pybind11_add_module(cmake_example src/main.cpp)
 
-add_library(disp_vector disp_vector.cpp)
-
-pybind11_add_module(mymodule pymodule.cpp)
-
-target_link_libraries(mymodule PRIVATE disp_vector)
+# EXAMPLE_VERSION_INFO is defined by setup.py and passed into the C++ code as a
+# define (VERSION_INFO) here.
+target_compile_definitions(cmake_example
+                           PRIVATE VERSION_INFO=${EXAMPLE_VERSION_INFO})
