@@ -1,15 +1,9 @@
 #include <pybind11/pybind11.h>
-
-#define STRINGIFY(x) #x
-#define MACRO_STRINGIFY(x) STRINGIFY(x)
-
-int add(int i, int j) {
-    return i + j;
-}
+#include "solver.h"
 
 namespace py = pybind11;
 
-PYBIND11_MODULE(cmake_example, m) {
+PYBIND11_MODULE(solver, m) {
     m.doc() = R"pbdoc(
         Pybind11 example plugin
         -----------------------
