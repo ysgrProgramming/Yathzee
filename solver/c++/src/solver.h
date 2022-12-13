@@ -5,6 +5,7 @@
 #define BONUS_LEVEL 63
 #define BONUS_POINT 35
 #define RETRY_LIMIT 2
+
 #include <vector>
 #include <algorithm>
 #include <iostream>
@@ -121,7 +122,7 @@ vector<double> init_val(vector<vector<double>>& data_list, vector<vector<int>>& 
     return val_list;
 };
 
-vector<double> update_val(vector<int>& val_list, vector<vector<vector<pair<int, int>>>>& trans_list){
+vector<double> update_val(vector<double>& val_list, vector<vector<vector<pair<int, int>>>>& trans_list){
     vector<double> new_val_list(PAT_LENGTH, 0);
     for (int i=0;i<PAT_LENGTH;i++){
         for (auto& t_list: trans_list[i]){
@@ -141,11 +142,25 @@ vector<double> update_val(vector<int>& val_list, vector<vector<vector<pair<int, 
 vector<vector<double>> solve(vector<vector<int>> point_list){
     int rank_len = point_list.size();
     vector<vector<double>> data_list(1ll<<rank_len, vector<double>(BONUS_LEVEL+1, 0));
-
+    vector<vector<vector<pair<int, int>>>> trans_list = make_trans_list();
     for (int i=(1ll<<rank_len)-2;i>=0;i--){
+        cout << i << endl;
         for (int j=0;j<BONUS_LEVEL+1;j++){
-            vector<int> val_list = init_val(data_list, point_list, i, j);
+            vector<double> val_list = init_val(data_list, point_list, i, j);
+            for (int k=0;k<RETRY_LIMIT;k++){
+                val_list = update_val(val_list, trans_list);
+            }
+            double val = 0;
+            for (auto t_pair: trans_list[0][1]){
+                int key = t_pair.first;
+                int value = t_pair.second;
+                val += val_list[key] * value;
+            }
+            val /= pow(6, 5);
+            cout << val << ", ";
+            data_list[i][j] = val;
         }
+        cout << endl;
     }
     return data_list;
 };
